@@ -13,46 +13,48 @@ export const Repository = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 .625rem;
-  width: 15.625rem;
+  width: 18rem;
+`;
 
-  header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.875rem;
+export const RepositoryHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.875rem;
 
-    img {
-      width: 4rem;
-    }
-
-    strong {
-      font-size: 1.5rem;
-      margin-top: .625rem;
-    }
-
-    small {
-      font-size: .875rem;
-      margin-top: #666;
-    }
+  img {
+    width: 4rem;
   }
 
-  ul {
-    list-style: none;
+  strong {
+    font-size: 1.5rem;
+    margin-top: .625rem;
+  }
 
-    li {
-      font-weight: bold;
-      padding: .75rem 1.25rem;
+  small {
+    font-size: .875rem;
+    margin-top: #666;
+    }
+`;
 
-      small {
-        color: #999;
-        font-size: .875rem;
-        font-style: italic;
-        font-weight: normal;
-      }
+export const RepositoryInfos = styled.ul`
+  list-style: none;
 
-      &:nth-child(odd) {
-        background: #F5F5F5;
-      }
+  li {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    padding: .75rem 1.25rem;
+
+    small {
+      color: #999;
+      font-size: .875rem;
+      font-style: italic;
+      font-weight: normal;
+    }
+
+    &:nth-child(odd) {
+      background: #F5F5F5;
     }
   }
 `;

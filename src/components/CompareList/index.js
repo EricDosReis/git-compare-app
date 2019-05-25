@@ -1,35 +1,61 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Container, Repository } from './styles';
+import {
+  Container, Repository, RepositoryHeader, RepositoryInfos,
+} from './styles';
 
-const CompareList = () => (
+const CompareList = ({ repositories }) => (
   <Container>
-    <Repository>
-      <header>
-        <img src="https://avatars3.githubusercontent.com/u/69631?v=4" alt="React" />
-        <strong>react</strong>
-        <small>facebook</small>
-      </header>
+    {repositories.map(repository => (
+      <Repository key={repository.id}>
+        <RepositoryHeader>
+          <img
+            src={repository.owner.avatar_url}
+            alt={repository.owner.login}
+          />
 
-      <ul>
-        <li>
-          95,019 <small>stars</small>
-        </li>
+          <strong>{repository.name}</strong>
+          <small>{repository.owner.login}</small>
+        </RepositoryHeader>
 
-        <li>
-          3,221 <small>forks</small>
-        </li>
+        <RepositoryInfos>
+          <li>
+            {repository.stargazers_count} <small>stars</small>
+          </li>
 
-        <li>
-          28 <small>issues</small>
-        </li>
+          <li>
+            {repository.forks_count} <small>forks</small>
+          </li>
 
-        <li>
-          3 days ago <small>last commit</small>
-        </li>
-      </ul>
-    </Repository>
+          <li>
+            {repository.open_issues_count} <small>issues</small>
+          </li>
+
+          <li>
+            {repository.lastCommit} <small>last commit</small>
+          </li>
+        </RepositoryInfos>
+      </Repository>
+    ))}
   </Container>
 );
+
+CompareList.propTypes = {
+  repositories: PropTypes
+    .arrayOf(PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      owner: PropTypes.shape({
+        login: PropTypes.string,
+        avatar_url: PropTypes.string,
+      }),
+      stargazers_count: PropTypes.number,
+      forks_count: PropTypes.number,
+      open_issues_count: PropTypes.number,
+      pushed_at: PropTypes.string,
+    }))
+    .isRequired,
+};
 
 export default CompareList;
