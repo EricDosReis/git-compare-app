@@ -8,11 +8,13 @@ import logo from '../../assets/logo.png';
 import { Container, Form, Input } from './styles';
 
 import CompareList from '../../components/CompareList';
+import Button from '../../components/Button';
 
 dayjs.extend(relativeTime);
 
 export default class Main extends Component {
   state = {
+    isLoading: false,
     repositoryInput: '',
     repositories: [],
     repositoryError: false,
@@ -20,6 +22,8 @@ export default class Main extends Component {
 
   handleAddRepository = async (e) => {
     e.preventDefault();
+
+    this.setState({ isLoading: true });
 
     const { repositoryInput, repositories } = this.state;
 
@@ -41,11 +45,15 @@ export default class Main extends Component {
       }
     } catch (error) {
       this.setState({ repositoryError: true });
+    } finally {
+      this.setState({ isLoading: false });
     }
   }
 
   render() {
-    const { repositories, repositoryInput, repositoryError } = this.state;
+    const {
+      repositories, repositoryInput, repositoryError, isLoading,
+    } = this.state;
 
     return (
       <Container>
@@ -59,7 +67,11 @@ export default class Main extends Component {
             value={repositoryInput}
             onChange={e => this.setState({ repositoryInput: e.target.value })}
           />
-          <button type="submit">Ok</button>
+
+          <Button
+            label="Ok"
+            isLoading={isLoading}
+          />
         </Form>
 
         <CompareList repositories={repositories} />

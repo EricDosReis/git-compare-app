@@ -2,7 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  Container, Repository, RepositoryHeader, RepositoryInfos,
+  Container,
+  Repository,
+  RepositoryHeader,
+  RepositoryLogo,
+  RepositoryName,
+  RepositoryOwner,
+  RepositoryInfos,
+  RepositoryInfo,
 } from './styles';
 
 const CompareList = ({ repositories }) => (
@@ -10,31 +17,31 @@ const CompareList = ({ repositories }) => (
     {repositories.map(repository => (
       <Repository key={repository.id}>
         <RepositoryHeader>
-          <img
+          <RepositoryLogo
             src={repository.owner.avatar_url}
             alt={repository.owner.login}
           />
 
-          <strong>{repository.name}</strong>
-          <small>{repository.owner.login}</small>
+          <RepositoryName>{repository.name}</RepositoryName>
+          <RepositoryOwner>{repository.owner.login}</RepositoryOwner>
         </RepositoryHeader>
 
         <RepositoryInfos>
-          <li>
+          <RepositoryInfo>
             {repository.stargazers_count} <small>stars</small>
-          </li>
+          </RepositoryInfo>
 
-          <li>
+          <RepositoryInfo>
             {repository.forks_count} <small>forks</small>
-          </li>
+          </RepositoryInfo>
 
-          <li>
+          <RepositoryInfo>
             {repository.open_issues_count} <small>issues</small>
-          </li>
+          </RepositoryInfo>
 
-          <li>
+          <RepositoryInfo>
             {repository.lastCommit} <small>last commit</small>
-          </li>
+          </RepositoryInfo>
         </RepositoryInfos>
       </Repository>
     ))}

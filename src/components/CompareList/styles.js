@@ -21,40 +21,40 @@ export const RepositoryHeader = styled.header`
   flex-direction: column;
   align-items: center;
   padding: 1.875rem;
+`;
 
-  img {
-    width: 4rem;
-  }
+export const RepositoryLogo = styled.img`
+  width: 4rem;
+`;
 
-  strong {
-    font-size: 1.5rem;
-    margin-top: .625rem;
-  }
+export const RepositoryName = styled.strong`
+  font-size: 1.5rem;
+  margin-top: .625rem;
+`;
 
-  small {
-    font-size: .875rem;
-    margin-top: #666;
-    }
+export const RepositoryOwner = styled.small`
+  font-size: .875rem;
+  margin-top: #666;
 `;
 
 export const RepositoryInfos = styled.ul`
   list-style: none;
+`;
 
-  li {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    padding: .75rem 1.25rem;
+export const RepositoryInfo = styled.li`
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  padding: .75rem 1.25rem;
 
-    small {
-      color: #999;
-      font-size: .875rem;
-      font-style: italic;
-      font-weight: normal;
-    }
+  small {
+    color: #999;
+    font-size: .875rem;
+    font-style: italic;
+    font-weight: normal;
+  }
 
-    &:nth-child(odd) {
-      background: #F5F5F5;
-    }
+  &:nth-child(odd) {
+    background: #F5F5F5;
   }
 `;
