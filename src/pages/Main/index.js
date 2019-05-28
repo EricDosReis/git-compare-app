@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import api from '../../services/api';
+import storage from '../../services/storage';
+import http from '../../services/http';
 import logo from '../../assets/logo.png';
 
 import { Container, Form, Input } from './styles';
@@ -18,7 +19,11 @@ export default class Main extends Component {
     repositoryInput: '',
     repositories: [],
     repositoryError: false,
-  };
+  }
+
+  componentDidMount() {
+    this.setState({ repositories: storage.getItem('repositories') });
+  }
 
   handleAddRepository = async (e) => {
     e.preventDefault();
@@ -28,21 +33,17 @@ export default class Main extends Component {
     const { repositoryInput, repositories } = this.state;
 
     try {
-      const res = await fetch(`${api}/repos/${repositoryInput}`);
+      const repository = await http.get(`repos/${repositoryInput}`);
 
-      if (res.ok) {
-        const data = await res.json();
+      repository.lastCommit = dayjs(repository.pushed_at).fromNow();
 
-        data.lastCommit = dayjs(data.pushed_at).fromNow();
+      storage.setItem('repositories', repository);
 
-        this.setState({
-          repositoryInput: '',
-          repositories: [...repositories, data],
-          repositoryError: false,
-        });
-      } else {
-        throw Error(`Request rejected with status ${res.status}`);
-      }
+      this.setState({
+        repositoryInput: '',
+        repositories: [...repositories, repository],
+        repositoryError: false,
+      });
     } catch (error) {
       this.setState({ repositoryError: true });
     } finally {
