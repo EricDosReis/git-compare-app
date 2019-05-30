@@ -58,3 +58,11 @@ export const RepositoryInfo = styled.li`
     background: #F5F5F5;
   }
 `;
+
+export const RepositoryActions = styled.div`
+  display: flex;
+
+  button {
+    flex-grow: 1;
+  }
+`;

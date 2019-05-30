@@ -1,43 +1,40 @@
 import React, { Component } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 
 import storage from '../../services/storage';
 import http from '../../services/http';
 import logo from '../../assets/logo.png';
+import { dateFromNow } from '../../formatters/date';
 
 import { Container, Form, Input } from './styles';
 
 import CompareList from '../../components/CompareList';
 import Button from '../../components/Button';
 
-dayjs.extend(relativeTime);
-
 export default class Main extends Component {
   state = {
-    isLoading: false,
+    loading: false,
     repositoryInput: '',
     repositories: [],
     repositoryError: false,
+    disabled: false,
   }
 
   componentDidMount() {
-    this.setState({ repositories: storage.getItem('repositories') });
+    this.setState({ repositories: storage.getAll('repositories') });
   }
 
   handleAddRepository = async (e) => {
     e.preventDefault();
 
-    this.setState({ isLoading: true });
+    this.setState({ loading: true, disabled: true });
 
     const { repositoryInput, repositories } = this.state;
 
     try {
       const repository = await http.get(`repos/${repositoryInput}`);
 
-      repository.lastCommit = dayjs(repository.pushed_at).fromNow();
-
-      storage.setItem('repositories', repository);
+      repository.lastCommit = dateFromNow(repository.pushed_at);
+      storage.add('repositories', repository);
 
       this.setState({
         repositoryInput: '',
@@ -47,13 +44,49 @@ export default class Main extends Component {
     } catch (error) {
       this.setState({ repositoryError: true });
     } finally {
-      this.setState({ isLoading: false });
+      this.setState({ loading: false, disabled: false });
+    }
+  }
+
+  handleRemoveRepository = (id) => {
+    const { repositories } = this.state;
+    const updatedRepositories = repositories.filter(repository => repository.id !== id);
+
+    this.setState({
+      repositories: [...updatedRepositories],
+      repositoryError: false,
+    });
+
+    storage.update('repositories', updatedRepositories);
+    this.setState({ loading: false });
+  }
+
+  handleUpdateRepository = async (owner, name) => {
+    const { repositories } = this.state;
+
+    try {
+      const repository = await http.get(`repos/${owner}/${name}`);
+      const repositoryIndex = repositories.findIndex(({ id }) => repository.id === id);
+
+      repository.lastCommit = dateFromNow(repository.pushed_at);
+      repositories[repositoryIndex] = repository;
+
+      storage.update('repositories', repositories);
+
+      this.setState({
+        repositories: [...repositories],
+        repositoryError: false,
+      });
+    } catch (error) {
+      this.setState({ repositoryError: true });
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
   render() {
     const {
-      repositories, repositoryInput, repositoryError, isLoading,
+      repositories, repositoryInput, repositoryError, loading, disabled,
     } = this.state;
 
     return (
@@ -71,11 +104,18 @@ export default class Main extends Component {
 
           <Button
             label="Ok"
-            isLoading={isLoading}
+            className="ml-1"
+            loading={loading}
+            disabled={disabled}
+            submit
           />
         </Form>
 
-        <CompareList repositories={repositories} />
+        <CompareList
+          repositories={repositories}
+          handleRemoveRepository={this.handleRemoveRepository}
+          handleUpdateRepository={this.handleUpdateRepository}
+        />
       </Container>
     );
   }

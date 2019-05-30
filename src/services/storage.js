@@ -1,13 +1,18 @@
-const setItem = (key, item) => {
-  const repositories = JSON.parse(localStorage.getItem(key)) || [];
+const add = (key, item) => {
+  const items = JSON.parse(localStorage.getItem(key)) || [];
 
-  repositories.push(item);
-  localStorage.setItem(key, JSON.stringify(repositories));
+  items.push(item);
+  localStorage.setItem(key, JSON.stringify(items));
 };
 
-const getItem = key => JSON.parse(localStorage.getItem(key)) || [];
+const getAll = key => JSON.parse(localStorage.getItem(key)) || [];
+
+const update = (key, items) => {
+  localStorage.setItem(key, JSON.stringify(items));
+};
 
 export default {
-  setItem,
-  getItem,
+  add,
+  getAll,
+  update,
 };

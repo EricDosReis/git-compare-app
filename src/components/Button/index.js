@@ -5,22 +5,31 @@ import { Container } from './styles';
 
 import Loader from '../Loader';
 
-const Button = ({ label, isLoading, isSubmit }) => (
-  <Container type={isSubmit ? 'submit' : 'button'}>
-    {isLoading ? <Loader /> : label}
+const Button = ({
+  label, loading, submit, ...props
+}) => (
+  <Container
+    type={submit ? 'submit' : 'button'}
+    {...props}
+  >
+    {loading ? <Loader /> : label}
   </Container>
 );
 
 Button.defaultProps = {
   label: '',
-  isLoading: false,
-  isSubmit: true,
+  loading: false,
+  submit: false,
+  danger: false,
+  disabled: false,
 };
 
 Button.propTypes = {
   label: PropTypes.string,
-  isLoading: PropTypes.bool,
-  isSubmit: PropTypes.bool,
+  loading: PropTypes.bool,
+  submit: PropTypes.bool,
+  danger: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 export default Button;

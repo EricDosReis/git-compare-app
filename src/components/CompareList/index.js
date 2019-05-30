@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '../Button';
 
 import {
   Container,
@@ -10,9 +11,10 @@ import {
   RepositoryOwner,
   RepositoryInfos,
   RepositoryInfo,
+  RepositoryActions,
 } from './styles';
 
-const CompareList = ({ repositories }) => (
+const CompareList = ({ repositories, handleRemoveRepository, handleUpdateRepository }) => (
   <Container>
     {repositories.map(repository => (
       <Repository key={repository.id}>
@@ -43,6 +45,20 @@ const CompareList = ({ repositories }) => (
             {repository.lastCommit} <small>last commit</small>
           </RepositoryInfo>
         </RepositoryInfos>
+
+        <RepositoryActions className="p1">
+          <Button
+            label="Remove"
+            danger
+            onClick={() => handleRemoveRepository(repository.id)}
+          />
+
+          <Button
+            label="Update"
+            className="ml-1"
+            onClick={() => handleUpdateRepository(repository.owner.login, repository.name)}
+          />
+        </RepositoryActions>
       </Repository>
     ))}
   </Container>
@@ -62,6 +78,14 @@ CompareList.propTypes = {
       open_issues_count: PropTypes.number,
       pushed_at: PropTypes.string,
     }))
+    .isRequired,
+
+  handleRemoveRepository: PropTypes
+    .func
+    .isRequired,
+
+  handleUpdateRepository: PropTypes
+    .func
     .isRequired,
 };
 
